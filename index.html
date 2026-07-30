@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Derick Danes — Junior Programmer & Web Developer</title>
+<meta name="description" content="Portofolio Derick Danes. Mahasiswa Sistem Informasi Universitas Mikroskil yang membangun aplikasi web: React, TypeScript, Supabase, JavaScript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Palet diambil dari S-TIX, aplikasi buatan Derick sendiri:
+   latar indigo-hitam, aksen rose "kursi dipilih", periwinkle nav.
+   ========================================================= */
+:root{
+  --bg:#0e0d16;
+  --bg-2:#141322;
+  --surface:#1a1828;
+  --line:#292639;
+  --ink:#f3f1f8;
+  --muted:#8f8aa6;
+  --dim:#767191;
+  --accent:#e0455f;      /* "dipilih" */
+  --violet:#a89ff0;      /* tautan S-TIX */
+  --maxw:1180px;
+  --pad:clamp(20px,5vw,64px);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+h1,h2,h3{margin:0;font-family:"Archivo",system-ui,sans-serif;font-weight:800;line-height:.94}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%;display:block}
+
+.mono{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+
+:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:2px}
+
+/* ---------------- NAV ---------------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{
+  max-width:var(--maxw);margin-inline:auto;padding:14px var(--pad);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.brand{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--ink)}
+.brand span{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:clamp(14px,2.4vw,28px)}
+.nav-links a{
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .18s;
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-cv{
+  border:1px solid var(--line);border-radius:999px;padding:8px 15px 7px;line-height:1;color:var(--ink)!important;
+  transition:border-color .18s,background .18s;
+}
+.nav-cv:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+@media (max-width:620px){.nav-hide{display:none}}
+
+/* ---------------- HERO ---------------- */
+.hero{padding:clamp(44px,7vw,76px) 0 clamp(28px,5vw,44px);text-align:center}
+.hero-eyebrow{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:clamp(28px,6vw,52px)}
+.hero-eyebrow span{color:var(--dim)}
+.hero-eyebrow b{color:var(--muted);font-weight:500}
+@media (max-width:600px){
+  .hero-eyebrow{flex-direction:column;gap:5px}
+  .hero-eyebrow span{display:none}
+}
+
+.name{
+  --nsize:clamp(3.2rem,18.5vw,17rem);
+  display:grid;justify-items:center;align-items:center;
+}
+.name-line{
+  font-size:var(--nsize);
+  font-variation-settings:"wdth" 118,"wght" 800;
+  letter-spacing:-.04em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.portrait{
+  width:calc(var(--nsize) * .78);
+  height:calc(var(--nsize) * .78);
+  align-self:center;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:50% 26%;
+  margin-block:calc(var(--nsize) * -.45);
+  z-index:2;
+  border:1px solid var(--line);
+  box-shadow:0 18px 70px -14px #000;
+}
+
+.hero-captions{
+  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  margin-top:clamp(26px,5vw,44px);
+  text-align:left;
+}
+.hero-captions p{max-width:30ch;font-size:.9rem;color:var(--muted);line-height:1.55}
+.hero-captions p:last-child{text-align:right;margin-left:auto}
+.hero-captions strong{color:var(--ink);font-weight:600}
+@media (max-width:640px){
+  .hero-captions{flex-direction:column;gap:14px}
+  .hero-captions p:last-child{text-align:left;margin-left:0}
+}
+
+/* ------------- SIGNATURE: PEMILIH KURSI ------------- */
+.seatbar{border-block:1px solid var(--line);background:var(--bg-2);padding:clamp(26px,4.5vw,40px) 0}
+.seatbar-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.screen{
+  height:5px;border-radius:0 0 60% 60%/0 0 100% 100%;
+  background:linear-gradient(90deg,transparent,var(--violet),transparent);
+  opacity:.5;margin:0 auto 16px;max-width:520px;
+}
+.seats{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:clamp(4px,.8vw,8px);
+  max-width:560px;margin-inline:auto;
+}
+.seat{
+  aspect-ratio:1;border:1px solid #35314a;border-radius:4px;
+  background:#221f33;padding:0;cursor:pointer;
+  font-family:"IBM Plex Mono",monospace;font-size:.5rem;color:transparent;
+  transition:background .16s,border-color .16s,transform .16s;
+}
+.seat:hover:not([disabled]){border-color:var(--violet);transform:translateY(-2px)}
+.seat[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+.seat[disabled]{background:#100f1b;border-color:#1d1b2b;cursor:not-allowed}
+.seat-readout{
+  margin-top:18px;text-align:center;
+  font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--muted);
+}
+.seat-readout b{color:var(--ink);font-weight:500}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;border:1px solid var(--line);margin-right:6px;vertical-align:-1px}
+.legend .l-sel i{background:var(--accent);border-color:var(--accent)}
+.legend .l-taken i{background:#100f1b}
+
+/* ---------------- TAG ROW ---------------- */
+.tags{border-bottom:1px solid var(--line);overflow:hidden;padding:14px 0}
+.tags-track{display:flex;gap:34px;white-space:nowrap;animation:slide 34s linear infinite}
+.tags-track span{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.tags-track span::after{content:"—";margin-left:34px;color:var(--line)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){
+  .tags-track{animation:none;flex-wrap:wrap;white-space:normal}
+}
+
+/* ---------------- SECTIONS ---------------- */
+.sec{padding:clamp(64px,9vw,120px) 0}
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:clamp(30px,5vw,52px);flex-wrap:wrap}
+.sec-head h2{font-size:clamp(1.9rem,5.4vw,3.4rem);font-variation-settings:"wdth" 112,"wght" 800;letter-spacing:-.025em}
+.sec-head .mono{padding-bottom:.4em}
+
+/* ---------------- KARYA ---------------- */
+.work{display:grid;gap:clamp(48px,7vw,92px)}
+.proj{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(24px,4vw,54px);align-items:start}
+.proj:nth-child(even) .proj-media{order:-1}
+@media (max-width:840px){
+  .proj{grid-template-columns:1fr}
+  .proj:nth-child(even) .proj-media{order:0}
+}
+.proj-meta{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+.proj-year{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;color:var(--accent)}
+.proj-role{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.proj h3{font-size:clamp(1.5rem,3.6vw,2.3rem);font-variation-settings:"wdth" 110,"wght" 700;letter-spacing:-.02em;margin-bottom:14px}
+.proj-lede{color:var(--muted);margin-bottom:20px;max-width:46ch}
+.proj ul{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:11px}
+.proj li{position:relative;padding-left:22px;font-size:.94rem;color:#cfcbdd}
+.proj li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:2px;background:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.chip{
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.06em;
+  border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted);
+}
+.proj-links{display:flex;gap:18px;flex-wrap:wrap}
+.proj-links a{
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--violet);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .18s;
+}
+.proj-links a:hover{border-color:var(--violet)}
+.proj-note{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--dim);letter-spacing:.06em}
+
+.proj-media{display:grid;gap:12px}
+.shot{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg-2)}
+.shot img{width:100%}
+.shot figcaption{
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.08em;color:var(--dim);
+  padding:9px 13px;border-top:1px solid var(--line);
+}
+
+/* panel spesifikasi — dipakai kalau belum ada tangkapan layar */
+.spec{border:1px solid var(--line);border-radius:10px;background:var(--bg-2);padding:clamp(20px,3vw,30px)}
+.spec dl{margin:0;display:grid;gap:14px}
+.spec div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:baseline}
+.spec dt{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.spec dd{margin:0;font-size:.9rem;color:#cfcbdd}
+@media (max-width:480px){.spec div{grid-template-columns:1fr;gap:3px}}
+
+/* ---------------- KEMAMPUAN ---------------- */
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+@media (max-width:880px){.skills{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.skills{grid-template-columns:1fr}}
+.skill{background:var(--bg);padding:clamp(20px,3vw,30px)}
+.skill h3{font-family:"IBM Plex Mono",monospace;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.skill p{font-size:.92rem;color:#cfcbdd}
+
+/* ---------------- JEJAK ---------------- */
+.track{display:grid;gap:0;border-top:1px solid var(--line)}
+.row{
+  display:grid;grid-template-columns:150px minmax(0,1fr);gap:clamp(16px,3vw,40px);
+  padding:22px 0;border-bottom:1px solid var(--line);
+}
+@media (max-width:600px){.row{grid-template-columns:1fr;gap:6px}}
+.row-when{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;color:var(--dim);padding-top:.35em}
+.row h3{font-size:1.05rem;font-variation-settings:"wdth" 105,"wght" 700;margin-bottom:5px}
+.row .where{color:var(--violet);font-size:.9rem;margin-bottom:7px}
+.row p{font-size:.92rem;color:var(--muted);max-width:62ch}
+
+/* ---------------- KONTAK ---------------- */
+.contact{border-top:1px solid var(--line);background:var(--bg-2)}
+.contact-in{padding:clamp(64px,9vw,112px) 0}
+.contact h2{font-size:clamp(2.1rem,7vw,4.6rem);font-variation-settings:"wdth" 118,"wght" 800;letter-spacing:-.03em;margin-bottom:18px}
+.contact-lede{color:var(--muted);max-width:44ch;margin-bottom:38px}
+.contact-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.contact-list a{
+  display:flex;justify-content:space-between;align-items:center;gap:18px;
+  background:var(--bg);padding:18px clamp(16px,2.6vw,26px);text-decoration:none;
+  transition:background .18s;
+}
+.contact-list a:hover{background:var(--surface)}
+.contact-list .k{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.contact-list .v{font-size:.98rem;color:var(--ink);text-align:right;word-break:break-all}
+
+footer{border-top:1px solid var(--line);padding:26px 0 34px}
+.foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* ---------------- REVEAL ---------------- */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top">DERICK<span>.</span>DANES</a>
+    <div class="nav-links">
+      <a href="#karya">Karya</a>
+      <a href="#kemampuan" class="nav-hide">Kemampuan</a>
+      <a href="#jejak" class="nav-hide">Jejak</a>
+      <a href="#kontak" class="nav-cv">Hubungi saya</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-eyebrow mono">
+      <b>Medan, Indonesia</b><span>/</span><b>Sistem Informasi &mdash; Universitas Mikroskil</b><span>/</span><b>Terbuka untuk peluang</b>
+    </div>
+
+    <div class="name">
+      <div class="name-line">Derick</div>
+      <img class="portrait" src="assets/derick.jpg" alt="Foto Derick Danes" width="372" height="372">
+      <div class="name-line">Danes</div>
+    </div>
+
+    <div class="hero-captions">
+      <p>Saya membangun aplikasi web dari nol &mdash; <strong>rancang basis datanya, tulis logikanya, sampai antarmukanya jadi</strong>. Sekarang semester 5 dan sedang mencari tempat untuk mengerjakan itu setiap hari.</p>
+      <p>Dua hal yang paling sering saya kerjakan: <strong>data yang harus benar</strong> dan <strong>alur yang tidak boleh membingungkan pengguna</strong>. Keduanya ada di halaman ini.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ELEMEN KHAS: pemilih kursi dari S-TIX ============ -->
+<section class="seatbar" aria-labelledby="seat-title">
+  <div class="wrap">
+    <div class="seatbar-head">
+      <span class="mono" id="seat-title">Pilih kursi &mdash; potongan nyata dari S-TIX</span>
+      <span class="mono">Rp50.000 / kursi</span>
+    </div>
+    <div class="screen" aria-hidden="true"></div>
+    <div class="seats" id="seats" role="group" aria-label="Denah kursi bioskop, contoh interaktif"></div>
+    <p class="seat-readout" id="readout">Belum ada kursi dipilih.</p>
+    <div class="legend mono">
+      <span class="l-free"><i></i>Tersedia</span>
+      <span class="l-sel"><i></i>Dipilih</span>
+      <span class="l-taken"><i></i>Terisi</span>
+    </div>
+  </div>
+</section>
+
+<div class="tags" aria-hidden="true">
+  <div class="tags-track" id="tagtrack"></div>
+</div>
+
+<!-- ============ KARYA ============ -->
+<main>
+<section class="sec wrap" id="karya">
+  <div class="sec-head rv">
+    <span class="mono">01 &mdash; Karya</span>
+    <h2>Yang sudah saya bangun</h2>
+  </div>
+
+  <div class="work">
+
+    <article class="proj rv">
+      <div class="proj-body">
+        <div class="proj-meta">
+          <span class="proj-year">2026</span>
+          <span class="proj-role">Proyek pribadi &middot; solo</span>
+        </div>
+        <h3>Money Clarity Planner</h3>
+        <p class="proj-lede">Aplikasi PWA pencatat keuangan pribadi dalam Rupiah. Dibuat karena mencatat pengeluaran dari struk itu melelahkan &mdash; jadi struknya yang dibaca aplikasi, bukan diketik ulang.</p>
+        <ul>
+          <li>Transaksi, akun, kategori, kantong anggaran (<em>envelope budgeting</em>), target bulanan, sampai pencatatan investasi dan mata uang asing.</li>
+          <li>Fitur scan struk: gambar diproses OCR lalu dibaca AI vision, hasilnya langsung jadi transaksi siap simpan.</li>
+          <li>Arsitektur berlapis &mdash; <code>domain &rarr; data &rarr; antarmuka</code>. Logika uang dipisah dari React dan Supabase supaya bisa diuji sendiri lewat unit test.</li>
+          <li>Skema PostgreSQL dengan Row Level Security, jadi data tiap pengguna terkunci di tingkat basis data, bukan cuma di kode.</li>
+        </ul>
+        <div class="chips">
+          <span class="chip">React 19</span><span class="chip">TypeScript</span><span class="chip">Vite</span>
+          <span class="chip">Tailwind CSS</span><span class="chip">Supabase</span><span class="chip">PostgreSQL</span><span class="chip">Vitest</span>
+        </div>
+        <p class="proj-note">Repositori masih privat &mdash; bisa saya tunjukkan langsung saat wawancara.</p>
+      </div>
+      <div class="proj-media">
+        <div class="spec">
+          <dl>
+            <div><dt>Peran</dt><dd>Merancang dan menulis seluruh aplikasi sendiri, dari skema basis data sampai antarmuka.</dd></div>
+            <div><dt>Masalah</dt><dd>Pencatatan keuangan manual selalu berhenti di minggu kedua karena terlalu banyak mengetik.</dd></div>
+            <div><dt>Keputusan</dt><dd>Logika uang disimpan sebagai bilangan bulat Rupiah dan diuji terpisah, supaya tidak ada selisih pembulatan.</dd></div>
+            <div><dt>Status</dt><dd>Dipakai sendiri setiap hari; fitur scan struk sudah berjalan.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj rv">
+      <div class="proj-body">
+        <div class="proj-meta">
+          <span class="proj-year">2025</span>
+          <span class="proj-role">Tugas kuliah &middot; tim 3 orang</span>
+        </div>
+        <h3>S-TIX &mdash; Pemesanan Tiket Bioskop</h3>
+        <p class="proj-lede">Aplikasi web pemesanan tiket dengan denah kursi. Dibuat tanpa framework sama sekali: HTML, CSS, dan JavaScript murni, sekitar 650 baris logika.</p>
+        <ul>
+          <li>Alur bertahap: data pemesan &rarr; bioskop &rarr; film &rarr; jam tayang &rarr; kursi. Tiap langkah terkunci sampai langkah sebelumnya diisi, jadi tidak ada pemesanan setengah jadi.</li>
+          <li>Denah kursi 8&times;10 yang dibangun ulang setiap kali data berubah, lengkap dengan status tersedia, dipilih, dan terisi.</li>
+          <li>Deteksi konflik sebelum menyimpan: kalau kursi yang dipilih ternyata sudah diambil, pemesanan ditolak dan denah dimuat ulang.</li>
+          <li>Riwayat pemesanan disimpan di LocalStorage dengan nomor urut otomatis, bisa dihapus dengan konfirmasi.</li>
+        </ul>
+        <div class="chips">
+          <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span><span class="chip">LocalStorage</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://github.com/PelikDeSekon/SISTEM-PEMESANAN-TIKET-BIOSKOP" target="_blank" rel="noopener">Lihat kode di GitHub</a>
+        </div>
+      </div>
+      <div class="proj-media">
+        <figure class="shot">
+          <img src="assets/stix-kursi.png" alt="Denah kursi S-TIX: delapan baris A sampai H, masing-masing sepuluh kursi, dengan keterangan tersedia, dipilih, dan terisi" loading="lazy">
+          <figcaption>Denah kursi &mdash; 8 baris &times; 10 kursi, dibangun ulang tiap perubahan data</figcaption>
+        </figure>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ KEMAMPUAN ============ -->
+<section class="sec wrap" id="kemampuan">
+  <div class="sec-head rv">
+    <span class="mono">02 &mdash; Kemampuan</span>
+    <h2>Alat yang saya pakai</h2>
+  </div>
+  <div class="skills rv">
+    <div class="skill">
+      <h3>Bahasa</h3>
+      <p>JavaScript dan TypeScript, HTML5, CSS3, SQL. Python di tingkat dasar.</p>
+    </div>
+    <div class="skill">
+      <h3>Antarmuka</h3>
+      <p>React 19, Tailwind CSS, Vite. Terbiasa membangun tanpa framework juga kalau memang tidak perlu.</p>
+    </div>
+    <div class="skill">
+      <h3>Basis data</h3>
+      <p>MySQL dan PostgreSQL lewat Supabase &mdash; perancangan skema, relasi, query, dan Row Level Security.</p>
+    </div>
+    <div class="skill">
+      <h3>Cara kerja</h3>
+      <p>Git dan GitHub, unit test dengan Vitest, deploy ke Vercel. Terbiasa memakai AI sebagai alat bantu, bukan pengganti pemahaman.</p>
+    </div>
+    <div class="skill">
+      <h3>Analisis sistem</h3>
+      <p>Analisis dan perancangan sistem (nilai A), manajemen proyek SI (A&minus;), pemodelan proses bisnis, pengantar ERP.</p>
+    </div>
+    <div class="skill">
+      <h3>Bahasa asing</h3>
+      <p>Indonesia sebagai bahasa ibu. Inggris pasif sampai menengah &mdash; cukup untuk membaca dokumentasi teknis.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JEJAK ============ -->
+<section class="sec wrap" id="jejak">
+  <div class="sec-head rv">
+    <span class="mono">03 &mdash; Jejak</span>
+    <h2>Pengalaman &amp; pendidikan</h2>
+  </div>
+  <div class="track rv">
+    <div class="row">
+      <div class="row-when">Juni 2025 &mdash; kini</div>
+      <div>
+        <h3>Marketing Support</h3>
+        <div class="where">PT Anugrah Danamas Remit &middot; Medan</div>
+        <p>Mengelola konten media sosial perusahaan, mengolah data dan administrasi harian layanan remitansi, serta berkoordinasi dengan tim internal untuk mengejar target performa.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row-when">2024 &mdash; 2028</div>
+      <div>
+        <h3>S1 Sistem Informasi</h3>
+        <div class="where">Universitas Mikroskil, Fakultas Informatika &middot; Medan</div>
+        <p>Semester 5, IPK sementara 3,04. Mata kuliah dengan nilai terbaik: Analisis &amp; Perancangan Sistem (A), Perencanaan Keberlangsungan Bisnis (A), Manajemen Proyek Sistem Informasi (A&minus;), Perancangan Web (B+), Pengantar ERP (B+), Kecerdasan Artifisial (B+).</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row-when">2021 &mdash; 2024</div>
+      <div>
+        <h3>Ketua Divisi Dokumentasi</h3>
+        <div class="where">OSIS (BASIC), Perguruan Buddhis Bodhicitta &middot; Medan</div>
+        <p>Memimpin tim dokumentasi untuk kebutuhan visual acara sekolah, dari perencanaan sampai eksekusi, sekaligus membenahi konsistensi media sosial sekolah di Instagram dan YouTube.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ KONTAK ============ -->
+<section class="contact" id="kontak">
+  <div class="wrap contact-in">
+    <div class="rv">
+      <span class="mono">04 &mdash; Kontak</span>
+      <h2 style="margin-top:14px">Mari bicara</h2>
+      <p class="contact-lede">Saya terbuka untuk posisi junior programmer atau web developer di Medan. Balasan paling cepat lewat WhatsApp. CV lengkap saya kirim langsung begitu diminta.</p>
+    </div>
+    <div class="contact-list rv">
+      <a id="wa" href="#kontak" target="_blank" rel="noopener">
+        <span class="k">WhatsApp</span><span class="v">Kirim pesan &rarr;</span>
+      </a>
+      <a href="mailto:derderick917@gmail.com">
+        <span class="k">Email</span><span class="v">derderick917@gmail.com</span>
+      </a>
+      <a href="https://github.com/DerickDanes" target="_blank" rel="noopener">
+        <span class="k">GitHub</span><span class="v">github.com/DerickDanes</span>
+      </a>
+      <a href="mailto:derderick917@gmail.com?subject=Permintaan%20CV%20Derick%20Danes">
+        <span class="k">CV</span><span class="v">Minta lewat email &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <span class="mono">&copy; 2026 Derick Danes</span>
+    <span class="mono">Dibuat sendiri &mdash; HTML, CSS, JavaScript</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---- Pemilih kursi: versi ringkas dari logika S-TIX ---- */
+  const ROWS = ["A","B","C","D"], COLS = 12, HARGA = 50000;
+  const TERISI = new Set(["A3","A4","B7","C1","C2","D9","D10","B12","A11"]);
+  const grid = document.getElementById("seats");
+  const readout = document.getElementById("readout");
+  const dipilih = new Set();
+
+  const rupiah = n => "Rp" + n.toLocaleString("id-ID");
+
+  function render(){
+    if(!dipilih.size){ readout.textContent = "Belum ada kursi dipilih."; return; }
+    const list = [...dipilih].sort();
+    readout.innerHTML = "Kursi dipilih: <b>" + list.join(", ") + "</b> &middot; Total <b>" +
+                        rupiah(list.length * HARGA) + "</b>";
+  }
+
+  ROWS.forEach(r => {
+    for(let c=1;c<=COLS;c++){
+      const kode = r+c;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "seat";
+      b.textContent = kode;
+      b.setAttribute("aria-label", "Kursi " + kode);
+      if(TERISI.has(kode)){
+        b.disabled = true;
+        b.setAttribute("aria-label", "Kursi " + kode + ", sudah terisi");
+      }else{
+        b.setAttribute("aria-pressed","false");
+        b.addEventListener("click", () => {
+          const on = b.getAttribute("aria-pressed") === "true";
+          b.setAttribute("aria-pressed", String(!on));
+          on ? dipilih.delete(kode) : dipilih.add(kode);
+          render();
+        });
+      }
+      grid.appendChild(b);
+    }
+  });
+  render();
+
+  /* ---- Baris tag berjalan ---- */
+  const TAGS = ["Web Development","React &amp; TypeScript","Supabase &amp; PostgreSQL","JavaScript","Perancangan Basis Data",
+                "Analisis Sistem","Unit Testing","Git &amp; GitHub"];
+  const track = document.getElementById("tagtrack");
+  track.innerHTML = (TAGS.map(t => "<span>"+t+"</span>").join("")).repeat(2);
+
+  /* ---- Tautan WhatsApp disusun saat halaman jalan, bukan ditulis di HTML,
+         supaya nomor tidak ikut terbaca perayap otomatis ---- */
+  const wa = document.getElementById("wa");
+  if(wa){
+    const bagian = ["62","813","9641","2852"];
+    wa.href = "https://wa.me/" + bagian.join("");
+  }
+
+  /* ---- Reveal saat digulir ---- */
+  const items = document.querySelectorAll(".rv");
+  if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: .08 });
+    items.forEach(el => io.observe(el));
+  }else{
+    items.forEach(el => el.classList.add("in"));
+  }
+})();
+</script>
+</body>
+</html>
