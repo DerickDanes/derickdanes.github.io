@@ -1,3 +1,8 @@
+# Sumber PDF portofolio memuat nomor HP sebagai teks biasa.
+# Jangan dipublikasikan ke repo publik.
+portofolio-pdf.html
+*.pdf
+
 Thumbs.db
 desktop.ini
 .DS_Store
