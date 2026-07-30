@@ -44,6 +44,7 @@ body{
 
 h1,h2,h3{margin:0;font-family:"Archivo",system-ui,sans-serif;font-weight:800;line-height:.94}
 p{margin:0}
+figure{margin:0}   /* tanpa ini browser memberi margin 40px kiri-kanan */
 a{color:inherit}
 img{max-width:100%;display:block}
 
@@ -120,7 +121,7 @@ img{max-width:100%;display:block}
   align-self:center;
   border-radius:50%;
   object-fit:cover;
-  object-position:50% 26%;
+  object-position:50% 38%;
   margin-block:calc(var(--nsize) * -.45);
   z-index:2;
   border:1px solid var(--line);
@@ -375,12 +376,18 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
         <p class="proj-note">Repositori masih privat &mdash; bisa saya tunjukkan langsung saat wawancara.</p>
       </div>
       <div class="proj-media">
+        <figure class="shot">
+          <img src="assets/mc-beranda.png" alt="Beranda Money Clarity Planner: kartu total harta Rp20.000.000, batas aman belanja per hari, persentase anggaran bulan ini, tombol aksi cepat, dan grafik tren kekayaan" loading="lazy">
+          <figcaption>Beranda &mdash; total harta, batas aman belanja harian, tren kekayaan</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="assets/mc-kantong.png" alt="Halaman Kantong: sisa dana belum dialokasikan, serta dua kantong anggaran Dana Darurat dan Build PC dengan batang progres terhadap targetnya" loading="lazy">
+          <figcaption>Kantong anggaran &mdash; alokasi per tujuan dengan progres ke target</figcaption>
+        </figure>
         <div class="spec">
           <dl>
             <div><dt>Peran</dt><dd>Merancang dan menulis seluruh aplikasi sendiri, dari skema basis data sampai antarmuka.</dd></div>
-            <div><dt>Masalah</dt><dd>Pencatatan keuangan manual selalu berhenti di minggu kedua karena terlalu banyak mengetik.</dd></div>
             <div><dt>Keputusan</dt><dd>Logika uang disimpan sebagai bilangan bulat Rupiah dan diuji terpisah, supaya tidak ada selisih pembulatan.</dd></div>
-            <div><dt>Status</dt><dd>Dipakai sendiri setiap hari; fitur scan struk sudah berjalan.</dd></div>
           </dl>
         </div>
       </div>
