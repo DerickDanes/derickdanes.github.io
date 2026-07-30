@@ -20,7 +20,7 @@
   --line:#292639;
   --ink:#f3f1f8;
   --muted:#8f8aa6;
-  --dim:#767191;
+  --dim:#8a85a1;   /* dinaikkan agar teks 11px tetap >=4.5:1 (WCAG AA) */
   --accent:#e0455f;      /* "dipilih" */
   --violet:#a89ff0;      /* tautan S-TIX */
   --maxw:1180px;
@@ -67,23 +67,31 @@ img{max-width:100%;display:block}
   border-bottom:1px solid var(--line);
 }
 .nav-in{
-  max-width:var(--maxw);margin-inline:auto;padding:14px var(--pad);
+  max-width:var(--maxw);margin-inline:auto;padding:3px var(--pad);
   display:flex;align-items:center;justify-content:space-between;gap:20px;
 }
-.brand{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--ink)}
+/* min-height 44px: memenuhi ukuran minimum target sentuh */
+.brand{
+  display:inline-flex;align-items:center;min-height:44px;
+  font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.2em;
+  text-transform:uppercase;text-decoration:none;color:var(--ink);
+}
 .brand span{color:var(--accent)}
 .nav-links{display:flex;align-items:center;gap:clamp(14px,2.4vw,28px)}
 .nav-links a{
+  display:inline-flex;align-items:center;min-height:44px;padding-inline:3px;
   font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .18s;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .18s ease-out;
 }
 .nav-links a:hover{color:var(--ink)}
 .nav-cv{
   border:1px solid var(--line);border-radius:999px;padding:8px 15px 7px;line-height:1;color:var(--ink)!important;
-  transition:border-color .18s,background .18s;
+  transition:border-color .18s ease-out,background .18s ease-out;
 }
 .nav-cv:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
-@media (max-width:620px){.nav-hide{display:none}}
+/* Spesifisitas harus menyamai .nav-links a, kalau tidak display:inline-flex menang
+   dan tautan ini muncul kembali di layar sempit. */
+@media (max-width:620px){.nav-links a.nav-hide{display:none}}
 
 /* ---------------- HERO ---------------- */
 .hero{padding:clamp(44px,7vw,76px) 0 clamp(28px,5vw,44px);text-align:center}
@@ -140,17 +148,23 @@ img{max-width:100%;display:block}
   background:linear-gradient(90deg,transparent,var(--violet),transparent);
   opacity:.5;margin:0 auto 16px;max-width:520px;
 }
+/* --cols dibaca juga oleh JavaScript supaya kode kursi cocok dengan baris
+   yang benar-benar terlihat. Lebar dijaga agar tiap kursi >=44px. */
 .seats{
+  --cols:12;
   display:grid;
-  grid-template-columns:repeat(12,minmax(0,1fr));
-  gap:clamp(4px,.8vw,8px);
-  max-width:560px;margin-inline:auto;
+  grid-template-columns:repeat(var(--cols),minmax(0,1fr));
+  gap:6px;
+  max-width:604px;margin-inline:auto;
+}
+@media (max-width:760px){
+  .seats{--cols:6;max-width:340px}
 }
 .seat{
   aspect-ratio:1;border:1px solid #35314a;border-radius:4px;
   background:#221f33;padding:0;cursor:pointer;
   font-family:"IBM Plex Mono",monospace;font-size:.5rem;color:transparent;
-  transition:background .16s,border-color .16s,transform .16s;
+  transition:background .16s ease-out,border-color .16s ease-out,transform .16s ease-out;
 }
 .seat:hover:not([disabled]){border-color:var(--violet);transform:translateY(-2px)}
 .seat[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
@@ -204,9 +218,11 @@ img{max-width:100%;display:block}
 }
 .proj-links{display:flex;gap:18px;flex-wrap:wrap}
 .proj-links a{
+  display:inline-flex;align-items:center;min-height:44px;
   font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--violet);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .18s;
+  color:var(--violet);text-decoration:none;box-shadow:inset 0 -1px 0 transparent;transition:box-shadow .18s;
 }
+.proj-links a:hover{box-shadow:inset 0 -1px 0 var(--violet)}
 .proj-links a:hover{border-color:var(--violet)}
 .proj-note{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--dim);letter-spacing:.06em}
 
@@ -265,7 +281,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
 .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 /* ---------------- REVEAL ---------------- */
-.rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1)}
+/* 400ms: batas atas transisi kompleks. Sebelumnya 700ms, terasa lambat. */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .4s cubic-bezier(.16,.84,.34,1),transform .4s cubic-bezier(.16,.84,.34,1)}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
@@ -505,8 +522,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
 <script>
 (function(){
   /* ---- Pemilih kursi: versi ringkas dari logika S-TIX ---- */
-  const ROWS = ["A","B","C","D"], COLS = 12, HARGA = 50000;
-  const TERISI = new Set(["A3","A4","B7","C1","C2","D9","D10","B12","A11"]);
+  const HURUF = ["A","B","C","D","E","F","G","H"], JUMLAH = 48, HARGA = 50000;
+  const TERISI = new Set(["A3","A4","B5","C1","C2","D6","E2","F5","G6","H1","A11","B12","D9"]);
   const grid = document.getElementById("seats");
   const readout = document.getElementById("readout");
   const dipilih = new Set();
@@ -520,30 +537,48 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
                         rupiah(list.length * HARGA) + "</b>";
   }
 
-  ROWS.forEach(r => {
-    for(let c=1;c<=COLS;c++){
-      const kode = r+c;
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "seat";
-      b.textContent = kode;
-      b.setAttribute("aria-label", "Kursi " + kode);
-      if(TERISI.has(kode)){
-        b.disabled = true;
-        b.setAttribute("aria-label", "Kursi " + kode + ", sudah terisi");
-      }else{
-        b.setAttribute("aria-pressed","false");
-        b.addEventListener("click", () => {
-          const on = b.getAttribute("aria-pressed") === "true";
-          b.setAttribute("aria-pressed", String(!on));
-          on ? dipilih.delete(kode) : dipilih.add(kode);
-          render();
-        });
+  /* Jumlah kolom mengikuti CSS: 12 di layar lebar, 6 di layar sempit.
+     Jumlah kursi tetap 48, hanya jumlah barisnya yang berubah — jadi setiap
+     kursi selalu >=44px tanpa mengorbankan kecocokan kode dengan barisnya. */
+  let kolomTerpasang = 0;
+
+  function bangun(){
+    const kolom = parseInt(getComputedStyle(grid).getPropertyValue("--cols"), 10) || 12;
+    if(kolom === kolomTerpasang) return;
+    kolomTerpasang = kolom;
+
+    grid.textContent = "";
+    dipilih.clear();
+    const baris = Math.ceil(JUMLAH / kolom);
+
+    for(let r=0;r<baris;r++){
+      for(let c=1;c<=kolom;c++){
+        const kode = HURUF[r] + c;
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "seat";
+        b.textContent = kode;
+        if(TERISI.has(kode)){
+          b.disabled = true;
+          b.setAttribute("aria-label", "Kursi " + kode + ", sudah terisi");
+        }else{
+          b.setAttribute("aria-label", "Kursi " + kode);
+          b.setAttribute("aria-pressed","false");
+          b.addEventListener("click", () => {
+            const on = b.getAttribute("aria-pressed") === "true";
+            b.setAttribute("aria-pressed", String(!on));
+            on ? dipilih.delete(kode) : dipilih.add(kode);
+            render();
+          });
+        }
+        grid.appendChild(b);
       }
-      grid.appendChild(b);
     }
-  });
-  render();
+    render();
+  }
+
+  bangun();
+  window.matchMedia("(max-width:760px)").addEventListener("change", bangun);
 
   /* ---- Baris tag berjalan ---- */
   const TAGS = ["Web Development","React &amp; TypeScript","Supabase &amp; PostgreSQL","JavaScript","Perancangan Basis Data",
