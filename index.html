@@ -191,7 +191,10 @@ img{max-width:100%;display:block}
 }
 
 /* ---------------- SECTIONS ---------------- */
-.sec{padding:clamp(64px,9vw,120px) 0}
+/* padding-block, BUKAN shorthand: elemen ini juga memakai .wrap, dan
+   `padding: X 0` akan menghapus padding-inline milik .wrap sehingga teks
+   menempel ke tepi layar di ponsel. */
+.sec{padding-block:clamp(64px,9vw,120px)}
 .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:clamp(30px,5vw,52px);flex-wrap:wrap}
 .sec-head h2{font-size:clamp(1.9rem,5.4vw,3.4rem);font-variation-settings:"wdth" 112,"wght" 800;letter-spacing:-.025em}
 .sec-head .mono{padding-bottom:.4em}
@@ -265,7 +268,7 @@ img{max-width:100%;display:block}
 
 /* ---------------- KONTAK ---------------- */
 .contact{border-top:1px solid var(--line);background:var(--bg-2)}
-.contact-in{padding:clamp(64px,9vw,112px) 0}
+.contact-in{padding-block:clamp(64px,9vw,112px)}   /* sama: .wrap butuh padding-inline-nya */
 .contact h2{font-size:clamp(2.1rem,7vw,4.6rem);font-variation-settings:"wdth" 118,"wght" 800;letter-spacing:-.03em;margin-bottom:18px}
 .contact-lede{color:var(--muted);max-width:44ch;margin-bottom:38px}
 .contact-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -280,6 +283,99 @@ img{max-width:100%;display:block}
 
 footer{border-top:1px solid var(--line);padding:26px 0 34px}
 .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* ====== KARTU 3D YANG MENDATAR SAAT DIGULIR (container scroll) ======
+   --p diisi JavaScript, 0 saat kartu baru masuk layar, 1 saat sudah tegak. */
+.cscroll{margin-bottom:clamp(52px,8vw,92px)}
+.cscroll-head{text-align:center;max-width:780px;margin:0 auto clamp(22px,4vw,38px)}
+.cscroll-head .mono{display:block;margin-bottom:10px}
+.cscroll-title{
+  font-size:clamp(1.45rem,3.4vw,2.5rem);
+  font-variation-settings:"wdth" 110,"wght" 700;
+  letter-spacing:-.02em;line-height:1.08;
+}
+.cscroll-title em{font-style:normal;color:var(--accent)}
+.cscroll-stage{perspective:1200px;perspective-origin:50% 0%}
+.cscroll-card{
+  --p:1;
+  transform:rotateX(calc((1 - var(--p)) * 20deg)) scale(calc(.92 + var(--p) * .08));
+  transform-origin:50% 0%;
+  border:1px solid var(--line);border-radius:14px;
+  background:var(--bg-2);padding:10px;
+  box-shadow:0 40px 90px -42px #000;
+  will-change:transform;
+}
+.cscroll-card img{width:100%;border-radius:8px}
+.cscroll-cap{margin-top:16px;text-align:center}
+
+/* ====== MEDIA YANG MELEBAR SAAT DIGULIR ======
+   Memakai transform:scale, bukan lebar, supaya tidak memicu reflow. */
+.expand{--e:1;margin-top:clamp(30px,5vw,52px)}
+.expand-inner{
+  max-width:760px;margin-inline:auto;
+  transform:scale(calc(.72 + .28 * var(--e)));
+  transform-origin:50% 50%;
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  background:var(--bg-2);will-change:transform;
+}
+.expand-inner img{width:100%}
+.expand-cap{margin-top:14px;text-align:center}
+
+/* ====== ADEGAN 3D: LAPISAN ARSITEKTUR ====== */
+.scene{border-block:1px solid var(--line);background:var(--bg-2);padding:clamp(56px,8vw,96px) 0}
+.scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,5vw,60px);align-items:center}
+@media (max-width:840px){.scene-grid{grid-template-columns:1fr}}
+.scene-copy h2{font-size:clamp(1.6rem,3.6vw,2.5rem);font-variation-settings:"wdth" 110,"wght" 800;letter-spacing:-.025em;margin:10px 0 14px}
+.scene-copy p{color:var(--muted);max-width:42ch}
+.scene-copy code{font-family:"IBM Plex Mono",monospace;font-size:.86em;color:var(--violet)}
+.stage{
+  perspective:900px;
+  min-height:clamp(240px,32vw,340px);
+  display:grid;place-items:center;
+  touch-action:pan-y;
+}
+.stack3d{
+  --rx:0deg;--ry:0deg;
+  transform-style:preserve-3d;
+  transform:rotateX(calc(58deg + var(--rx))) rotateZ(calc(-36deg + var(--ry)));
+  transition:transform .3s cubic-bezier(.2,.6,.2,1);
+  display:grid;
+}
+/* Label ditaruh di pojok tiap bidang, bukan di tengah, supaya ketiganya
+   tetap terbaca meski bidangnya saling menumpuk. */
+.plane{
+  grid-area:1/1;
+  width:clamp(150px,19vw,228px);aspect-ratio:1.4;
+  border:1px solid var(--line);border-radius:10px;
+  background:linear-gradient(140deg,#262238,#1a1829);
+  display:grid;place-items:start;padding:9px 11px;
+  font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;
+  text-transform:uppercase;color:#b3adcd;
+  box-shadow:0 26px 44px -26px #000;
+}
+.plane.p1{transform:translateZ(80px);border-color:#5b5388;color:#e6e2f7}
+.plane.p2{transform:translateZ(26px)}
+.plane.p3{transform:translateZ(-28px)}
+
+/* ====== SPOTLIGHT CARD (sorotan mengikuti kursor) ====== */
+.skill{position:relative;overflow:hidden}
+.skill::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),
+             color-mix(in srgb,var(--accent) 18%,transparent), transparent 62%);
+  opacity:0;transition:opacity .25s ease-out;
+}
+.skill:hover::before,.skill:focus-within::before{opacity:1}
+.skill > *{position:relative;z-index:1}
+
+/* Proyek satu kolom (dipakai S-TIX, medianya pindah ke pita melebar) */
+.proj--solo{grid-template-columns:1fr}
+.proj--solo .proj-body{max-width:72ch}
+
+@media (prefers-reduced-motion:reduce){
+  .cscroll-card,.expand-inner,.stack3d{transition:none}
+  .stack3d{transform:rotateX(58deg) rotateZ(-36deg)}
+}
 
 /* ---------------- REVEAL ---------------- */
 /* 400ms: batas atas transisi kompleks. Sebelumnya 700ms, terasa lambat. */
@@ -353,6 +449,19 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
     <h2>Yang sudah saya bangun</h2>
   </div>
 
+  <div class="cscroll rv">
+    <div class="cscroll-head">
+      <span class="mono">Money Clarity Planner &middot; Beranda</span>
+      <h3 class="cscroll-title">Satu layar, satu pertanyaan: <em>hari ini aman belanja berapa?</em></h3>
+    </div>
+    <div class="cscroll-stage">
+      <div class="cscroll-card" id="cscrollCard">
+        <img src="assets/mc-beranda.png" alt="Beranda Money Clarity Planner: kartu total harta Rp20.000.000, batas aman belanja per hari, persentase anggaran bulan ini, tombol aksi cepat, dan grafik tren kekayaan" loading="lazy" width="1400" height="492">
+      </div>
+    </div>
+    <p class="cscroll-cap mono">Total harta di atas, batas aman belanja harian tepat di bawahnya</p>
+  </div>
+
   <div class="work">
 
     <article class="proj rv">
@@ -377,10 +486,6 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
       </div>
       <div class="proj-media">
         <figure class="shot">
-          <img src="assets/mc-beranda.png" alt="Beranda Money Clarity Planner: kartu total harta Rp20.000.000, batas aman belanja per hari, persentase anggaran bulan ini, tombol aksi cepat, dan grafik tren kekayaan" loading="lazy">
-          <figcaption>Beranda &mdash; total harta, batas aman belanja harian, tren kekayaan</figcaption>
-        </figure>
-        <figure class="shot">
           <img src="assets/mc-kantong.png" alt="Halaman Kantong: sisa dana belum dialokasikan, serta dua kantong anggaran Dana Darurat dan Build PC dengan batang progres terhadap targetnya" loading="lazy">
           <figcaption>Kantong anggaran &mdash; alokasi per tujuan dengan progres ke target</figcaption>
         </figure>
@@ -393,7 +498,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
       </div>
     </article>
 
-    <article class="proj rv">
+    <article class="proj proj--solo rv">
       <div class="proj-body">
         <div class="proj-meta">
           <span class="proj-year">2025</span>
@@ -415,14 +520,38 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
           <a href="https://github.com/DerickDanes/SISTEM-PEMESANAN-TIKET-BIOSKOP" target="_blank" rel="noopener">Lihat kode di GitHub</a>
         </div>
       </div>
-      <div class="proj-media">
-        <figure class="shot">
-          <img src="assets/stix-kursi.png" alt="Denah kursi S-TIX: delapan baris A sampai H, masing-masing sepuluh kursi, dengan keterangan tersedia, dipilih, dan terisi" loading="lazy">
-          <figcaption>Denah kursi &mdash; 8 baris &times; 10 kursi, dibangun ulang tiap perubahan data</figcaption>
-        </figure>
-      </div>
     </article>
 
+    <div class="expand rv" id="expand">
+      <div class="expand-inner">
+        <img src="assets/stix-kursi.png" alt="Denah kursi S-TIX: delapan baris A sampai H, masing-masing sepuluh kursi, dengan keterangan tersedia, dipilih, dan terisi" loading="lazy" width="656" height="562">
+      </div>
+      <p class="expand-cap mono">Denah kursi S-TIX &mdash; 8 baris (A&ndash;H) &times; 10 kursi, dibangun ulang tiap data berubah</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ ADEGAN 3D: ARSITEKTUR BERLAPIS ============ -->
+<section class="scene">
+  <div class="wrap scene-grid">
+    <div class="scene-copy rv">
+      <span class="mono">Cara saya menyusun kode</span>
+      <h2>Tiga lapis, satu arah</h2>
+      <p>
+        Di Money Clarity, lapisan bawah tidak boleh mengimpor lapisan atas.
+        <code>domain</code> berisi logika uang murni &mdash; tanpa React, tanpa Supabase &mdash;
+        jadi perhitungannya bisa diuji tanpa menjalankan antarmuka sama sekali.
+        Aturan sesederhana ini yang membuat aplikasinya masih enak diubah setelah puluhan fitur.
+      </p>
+    </div>
+    <div class="stage rv" id="stage">
+      <div class="stack3d" id="stack3d">
+        <div class="plane p1">screens / ui</div>
+        <div class="plane p2">data</div>
+        <div class="plane p3">domain</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -468,9 +597,9 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
   </div>
   <div class="track rv">
     <div class="row">
-      <div class="row-when">Juni 2025 &mdash; kini</div>
+      <div class="row-when">Agustus 2025 &mdash; kini</div>
       <div>
-        <h3>Marketing Support</h3>
+        <h3>Marketing Assistant</h3>
         <div class="where">PT Anugrah Danamas Remit &middot; Medan</div>
         <p>Mengelola konten media sosial perusahaan, mengolah data dan administrasi harian layanan remitansi, serta berkoordinasi dengan tim internal untuk mengejar target performa.</p>
       </div>
@@ -603,6 +732,67 @@ footer{border-top:1px solid var(--line);padding:26px 0 34px}
   if(wa){
     const bagian = ["62","813","9641","2852"];
     wa.href = "https://wa.me/" + bagian.join("");
+  }
+
+  const hematGerak = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- Efek yang digerakkan posisi gulir ----
+     Nilai 0 saat elemen baru muncul di bawah layar, 1 setelah naik cukup jauh.
+     Semua diperbarui dalam satu requestAnimationFrame supaya tidak menumpuk. */
+  const efekGulir = [];
+  const kartu = document.getElementById("cscrollCard");
+  const melebar = document.getElementById("expand");
+  if(kartu)   efekGulir.push({ ukur: kartu.parentElement, tulis: p => kartu.style.setProperty("--p", p), rentang: .85 });
+  if(melebar) efekGulir.push({ ukur: melebar,             tulis: p => melebar.style.setProperty("--e", p), rentang: .75 });
+
+  if(efekGulir.length){
+    if(hematGerak){
+      efekGulir.forEach(f => f.tulis(1));          // langsung ke bentuk akhir
+    }else{
+      let menunggu = 0;
+      const hitung = () => {
+        const tinggi = window.innerHeight;
+        for(const f of efekGulir){
+          const kotak = f.ukur.getBoundingClientRect();
+          const p = (tinggi - kotak.top) / (tinggi * f.rentang);
+          f.tulis(Math.min(1, Math.max(0, p)).toFixed(3));
+        }
+        menunggu = 0;
+      };
+      const jadwalkan = () => { if(!menunggu) menunggu = requestAnimationFrame(hitung); };
+      addEventListener("scroll", jadwalkan, { passive:true });
+      addEventListener("resize", jadwalkan);
+      hitung();
+    }
+  }
+
+  /* ---- Adegan 3D: lapisan ikut miring mengikuti kursor ---- */
+  const panggung = document.getElementById("stage");
+  const tumpukan = document.getElementById("stack3d");
+  if(panggung && tumpukan && !hematGerak){
+    panggung.addEventListener("pointermove", e => {
+      const k = panggung.getBoundingClientRect();
+      const x = (e.clientX - k.left) / k.width  - .5;
+      const y = (e.clientY - k.top)  / k.height - .5;
+      tumpukan.style.setProperty("--ry", (x * 26).toFixed(1) + "deg");
+      tumpukan.style.setProperty("--rx", (-y * 16).toFixed(1) + "deg");
+    });
+    panggung.addEventListener("pointerleave", () => {
+      tumpukan.style.setProperty("--ry", "0deg");
+      tumpukan.style.setProperty("--rx", "0deg");
+    });
+  }
+
+  /* ---- Sorotan mengikuti kursor pada kartu kemampuan ---- */
+  const daftarSkill = document.querySelector(".skills");
+  if(daftarSkill && !hematGerak){
+    daftarSkill.addEventListener("pointermove", e => {
+      const kartuSkill = e.target.closest(".skill");
+      if(!kartuSkill) return;
+      const k = kartuSkill.getBoundingClientRect();
+      kartuSkill.style.setProperty("--mx", (e.clientX - k.left) + "px");
+      kartuSkill.style.setProperty("--my", (e.clientY - k.top)  + "px");
+    });
   }
 
   /* ---- Reveal saat digulir ---- */
